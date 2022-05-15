@@ -2,7 +2,16 @@
   "name": "esgrep",
   "version": "0.0.0",
   "description": "Syntactically-aware grep for JavaScript and TypeScript",
-  "keywords": ["grep", "regex", "ast", "cli", "js", "ts", "javascript", "typescript"],
+  "keywords": [
+    "grep",
+    "regex",
+    "ast",
+    "cli",
+    "js",
+    "ts",
+    "javascript",
+    "typescript"
+  ],
   "homepage": "https://github.com/ninofiliu/esgrep",
   "repository": "github:ninofiliu/esgrep",
   "author": {
@@ -12,6 +21,12 @@
   },
   "license": "GPL-3.0-only",
   "private": true,
-  "dependencies": {},
-  "devDependencies": {}
+  "type": "module",
+  "devDependencies": {
+    "prettier": "^2.6.2"
+  },
+  "dependencies": {
+    "@typescript-eslint/typescript-estree": "^5.22.0",
+    "typescript": "^4.6.4"
+  }
 }
