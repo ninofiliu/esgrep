@@ -1,16 +1,18 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/node': ^17.0.33
   '@typescript-eslint/typescript-estree': ^5.22.0
   prettier: ^2.6.2
   typescript: ^4.6.4
 
 dependencies:
   '@typescript-eslint/typescript-estree': 5.22.0_typescript@4.6.4
-  typescript: 4.6.4
 
 devDependencies:
+  '@types/node': 17.0.33
   prettier: 2.6.2
+  typescript: 4.6.4
 
 packages:
 
@@ -34,6 +36,10 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
     dev: false
+
+  /@types/node/17.0.33:
+    resolution: {integrity: sha512-miWq2m2FiQZmaHfdZNcbpp9PuXg34W5JZ5CrJ/BaS70VuhoJENBEQybeiYSaPBRNq6KQGnjfEnc/F3PN++D+XQ==}
+    dev: true
 
   /@typescript-eslint/types/5.22.0:
     resolution: {integrity: sha512-T7owcXW4l0v7NTijmjGWwWf/1JqdlWiBzPqzAWhobxft0SiEvMJB56QXmeCQjrPuM8zEfGUKyPQr/L8+cFUBLw==}
@@ -263,7 +269,7 @@ packages:
     resolution: {integrity: sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: false
+    dev: true
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}

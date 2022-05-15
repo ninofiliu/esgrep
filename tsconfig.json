@@ -5,6 +5,7 @@
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "moduleResolution": "node",
-    "sourceMap": true
+    "sourceMap": true,
+    "module": "CommonJS"
   }
 }
