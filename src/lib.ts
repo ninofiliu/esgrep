@@ -18,11 +18,39 @@ function* dfs(obj: Json): Generator<JsonObject> {
   }
 }
 
-const matches = (object: JsonObject, target: JsonObject) =>
-  JSON.stringify(object) === JSON.stringify(target);
+const matches = (value: Json, target: Json) => {
+  if (
+    value === null ||
+    typeof value === "boolean" ||
+    typeof value === "number" ||
+    typeof value === "string"
+  )
+    return value === target;
+  if (Array.isArray(value)) {
+    return (
+      Array.isArray(target) &&
+      value.length === target.length &&
+      value.every((aa, i) => matches(aa, target[i]))
+    );
+  } else {
+    return (
+      target !== null &&
+      typeof target === "object" &&
+      !Array.isArray(target) &&
+      objectMatches(value, target)
+    );
+  }
+};
 
-function* find(haystack: string, needle: string) {
-  const haystackAst = parse(haystack);
+const objectMatches = (value: JsonObject, target: JsonObject) => {
+  const keys = new Set([...Object.keys(value), ...Object.keys(target)]);
+  keys.delete("loc");
+  keys.delete("range");
+  return [...keys].every((key) => matches(value[key], target[key]));
+};
+
+export function* find(haystack: string, needle: string) {
+  const haystackAst = parse(haystack, { loc: true, range: true });
   const needleAst = parse(needle);
   if (needleAst.body.length !== 1)
     throw new Error("Needle body does not contain exactly one statement");
@@ -38,10 +66,3 @@ function* find(haystack: string, needle: string) {
     }
   }
 }
-
-const found = [
-  ...find(
-    `const a = 10; const b: number = 20; const c: string = "hello";`,
-    `const b: number = 20;`
-  ),
-];
