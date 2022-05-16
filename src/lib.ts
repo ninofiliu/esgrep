@@ -46,8 +46,14 @@ export function* find(haystack: string, needle: string) {
   const target = needleAst.body[0];
 
   for (const walked of dfs(haystackAst.body)) {
-    if (matches(walked, needleAst.body[0])) {
+    if (matches(walked, target)) {
       yield walked;
     }
+  }
+}
+
+export function* findStrings(haystack: string, needle: string) {
+  for (const found of find(haystack, needle)) {
+    yield haystack.slice(found.range[0], found.range[1]);
   }
 }
