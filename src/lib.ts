@@ -1,16 +1,17 @@
+import { Node } from "@typescript-eslint/types/dist/generated/ast-spec";
 import { parse } from "@typescript-eslint/typescript-estree";
 
-type JsonObject = { [key: string]: Json };
-type Json = null | boolean | number | string | Json[] | JsonObject;
+const isNode = (value: unknown): value is Node =>
+  value !== null && typeof value === "object" && "type" in value;
 
-function* dfs(obj: Json): Generator<JsonObject> {
+function* dfs(obj: unknown): Generator<Node> {
   if (typeof obj !== "object") return;
   if (obj === null) return;
-  let children: Json[];
+  let children: unknown[];
   if (Array.isArray(obj)) {
     children = obj;
   } else {
-    yield obj;
+    if (isNode(obj)) yield obj;
     children = Object.values(obj);
   }
   for (const child of children) {
@@ -18,35 +19,23 @@ function* dfs(obj: Json): Generator<JsonObject> {
   }
 }
 
-const matches = (value: Json, target: Json) => {
-  if (
-    value === null ||
-    typeof value === "boolean" ||
-    typeof value === "number" ||
-    typeof value === "string"
-  )
-    return value === target;
+const matches = (value: unknown, target: unknown) => {
+  if (value === null || typeof value !== "object") return value === target;
+  if (target === null || typeof target !== "object") return false;
+
   if (Array.isArray(value)) {
+    if (!Array.isArray(target)) return false;
     return (
-      Array.isArray(target) &&
       value.length === target.length &&
-      value.every((aa, i) => matches(aa, target[i]))
+      value.every((item, i) => matches(item, target[i]))
     );
   } else {
-    return (
-      target !== null &&
-      typeof target === "object" &&
-      !Array.isArray(target) &&
-      objectMatches(value, target)
-    );
+    if (Array.isArray(target)) return false;
+    const keys = new Set([...Object.keys(value), ...Object.keys(target)]);
+    keys.delete("range");
+    keys.delete("loc");
+    return [...keys].every((key) => matches(value[key], target[key]));
   }
-};
-
-const objectMatches = (value: JsonObject, target: JsonObject) => {
-  const keys = new Set([...Object.keys(value), ...Object.keys(target)]);
-  keys.delete("loc");
-  keys.delete("range");
-  return [...keys].every((key) => matches(value[key], target[key]));
 };
 
 export function* find(haystack: string, needle: string) {
@@ -54,14 +43,10 @@ export function* find(haystack: string, needle: string) {
   const needleAst = parse(needle);
   if (needleAst.body.length !== 1)
     throw new Error("Needle body does not contain exactly one statement");
+  const target = needleAst.body[0];
 
-  // @ts-ignore A ProgramStatement[] is a Json
-  const body = haystackAst.body as Json;
-  // @ts-ignore A Statement is a Json
-  const target = needleAst.body[0] as JsonObject;
-
-  for (const walked of dfs(body)) {
-    if (matches(walked, target)) {
+  for (const walked of dfs(haystackAst.body)) {
+    if (matches(walked, needleAst.body[0])) {
       yield walked;
     }
   }

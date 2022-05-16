@@ -10,9 +10,7 @@ import { readFile } from "fs/promises";
       process.stdout.write(
         [
           path,
-          // @ts-ignore
           found.loc.start.line,
-          // @ts-ignore
           found.loc.start.column,
           haystack.slice(found.range[0], found.range[1]),
         ].join(":") + "\n"
