@@ -12,7 +12,7 @@ const haystack = statements.join("\n");
 describe("with exact matches", () => {
   it(`should find itself`, () => {
     for (const statement of statements) {
-      expect([...findStrings(haystack, statement)]).toEqual([statement]);
+      expect([...findStrings(statement, haystack)]).toEqual([statement]);
     }
   });
 });
@@ -22,7 +22,7 @@ describe("with white space diff", () => {
     for (const statement of statements) {
       for (const w of [" ", "\t", "   "]) {
         expect([
-          ...findStrings(haystack, statement.replaceAll(" ", w)),
+          ...findStrings(statement.replaceAll(" ", w), haystack),
         ]).toEqual([statement]);
       }
     }
@@ -33,7 +33,7 @@ describe("with comment diff", () => {
   it("should find itself", () => {
     for (const statement of statements) {
       expect([
-        ...findStrings(haystack, statement.replaceAll(" ", "/* */")),
+        ...findStrings(statement.replaceAll(" ", "/* */"), haystack),
       ]).toEqual([statement]);
     }
   });
@@ -49,7 +49,7 @@ describe("inside blocks", () => {
     ];
     for (const blocker of blockers) {
       for (const statement of statements) {
-        expect([...findStrings(blocker(statement), statement)]).toEqual([
+        expect([...findStrings(statement, blocker(statement))]).toEqual([
           statement,
         ]);
       }

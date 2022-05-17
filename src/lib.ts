@@ -38,7 +38,7 @@ const matches = (value: unknown, target: unknown) => {
   }
 };
 
-export function* find(haystack: string, needle: string) {
+export function* find(needle: string, haystack: string) {
   const haystackAst = parse(haystack, { loc: true, range: true });
   const needleAst = parse(needle);
   if (needleAst.body.length !== 1)
@@ -52,8 +52,8 @@ export function* find(haystack: string, needle: string) {
   }
 }
 
-export function* findStrings(haystack: string, needle: string) {
-  for (const found of find(haystack, needle)) {
+export function* findStrings(needle: string, haystack: string) {
+  for (const found of find(needle, haystack)) {
     yield haystack.slice(found.range[0], found.range[1]);
   }
 }
