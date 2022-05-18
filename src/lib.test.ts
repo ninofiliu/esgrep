@@ -65,7 +65,7 @@ describe("options", () => {
       (s) => `fn(a,${s},b)`,
       (s) => `const fn = () => {const x = ${s}}`,
     ];
-    describe("true (default)", () => {
+    describe("false (default)", () => {
       it("should find an expression defined by an expression statement", () => {
         for (const expression of expressions) {
           for (const statementer of statementers) {
@@ -76,13 +76,13 @@ describe("options", () => {
         }
       });
     });
-    describe("false", () => {
+    describe("true", () => {
       it("should not find an expression defined by an expression statement", () => {
         for (const expression of expressions) {
           for (const statementer of statementers) {
             expect([
               ...findStrings(expression, statementer(expression), {
-                expressionOnly: false,
+                statement: true,
               }),
             ]).toEqual([]);
           }
@@ -94,7 +94,7 @@ describe("options", () => {
             const statement = statementer(expression);
             expect([
               ...findStrings(statement, statement, {
-                expressionOnly: false,
+                statement: true,
               }),
             ]).toEqual([statement]);
           }

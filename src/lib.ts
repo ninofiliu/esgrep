@@ -2,7 +2,7 @@ import { Node } from "@typescript-eslint/types/dist/generated/ast-spec";
 import { parse } from "@typescript-eslint/typescript-estree";
 
 type FindOptions = {
-  expressionOnly: boolean;
+  statement: boolean;
 };
 
 const isNode = (value: unknown): value is Node =>
@@ -48,7 +48,7 @@ export function* find(
   options: Partial<FindOptions> = {}
 ) {
   const fullOptions: FindOptions = {
-    expressionOnly: true,
+    statement: false,
     ...options,
   };
 
@@ -57,7 +57,7 @@ export function* find(
     throw new Error("Needle body does not contain exactly one statement");
   const needleStatement = needleAst.body[0];
   const target =
-    fullOptions.expressionOnly && needleStatement.type === "ExpressionStatement"
+    !fullOptions.statement && needleStatement.type === "ExpressionStatement"
       ? needleStatement.expression
       : needleStatement;
 
