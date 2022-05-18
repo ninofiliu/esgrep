@@ -56,3 +56,50 @@ describe("inside blocks", () => {
     }
   });
 });
+
+describe("options", () => {
+  describe("expressionOnly", () => {
+    const expressions = [`10`, `await fetch()`, `foo`, `"hello"`];
+    const statementers: ((s: string) => string)[] = [
+      (s) => `const x = ${s}`,
+      (s) => `fn(a,${s},b)`,
+      (s) => `const fn = () => {const x = ${s}}`,
+    ];
+    describe("true (default)", () => {
+      it("should find an expression defined by an expression statement", () => {
+        for (const expression of expressions) {
+          for (const statementer of statementers) {
+            expect([
+              ...findStrings(expression, statementer(expression)),
+            ]).toEqual([expression]);
+          }
+        }
+      });
+    });
+    describe("false", () => {
+      it("should not find an expression defined by an expression statement", () => {
+        for (const expression of expressions) {
+          for (const statementer of statementers) {
+            expect([
+              ...findStrings(expression, statementer(expression), {
+                expressionOnly: false,
+              }),
+            ]).toEqual([]);
+          }
+        }
+      });
+      it("should find a statement defined by an expression statement", () => {
+        for (const expression of expressions) {
+          for (const statementer of statementers) {
+            const statement = statementer(expression);
+            expect([
+              ...findStrings(statement, statement, {
+                expressionOnly: false,
+              }),
+            ]).toEqual([statement]);
+          }
+        }
+      });
+    });
+  });
+});
