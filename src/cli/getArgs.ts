@@ -49,10 +49,23 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
     Object.entries(options).map(([key, value]) => [aliases[key] || key, value])
   );
 
-  if (dealiasedOptions.help || pattern === undefined) {
+  if (
+    dealiasedOptions.help ||
+    (pattern === undefined && Object.keys(dealiasedOptions).length === 0)
+  ) {
     return {
       kind: "error",
       toLog: [usage],
+    };
+  }
+
+  if (pattern === undefined) {
+    return {
+      kind: "error",
+      toLog: [
+        "Invalid usage: pattern is required. You might fix this by adding -- before your positional arguments. I understood you passed the options:",
+        dealiasedOptions,
+      ],
     };
   }
 

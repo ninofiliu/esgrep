@@ -26,7 +26,10 @@ describe("getArgs", () => {
     it("should fail and log error", () => {
       expect(getArgs({ _: [], statement: true })).toEqual({
         kind: "error",
-        toLog: [usage],
+        toLog: [
+          "Invalid usage: pattern is required. You might fix this by adding -- before your positional arguments. I understood you passed the options:",
+          { statement: true },
+        ],
       });
     });
   });
