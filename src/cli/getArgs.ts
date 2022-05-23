@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import { CliOptions, partialCliOptionsSchema } from "../types";
+import { CliOptions } from "../types";
 
 type Args =
   | { kind: "error"; toLog: any[] }
@@ -18,6 +18,22 @@ const aliases = {
 const reversedAliases = {
   statement: "s",
   help: "h",
+} as const;
+
+const partialCliOptionsSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    statement: {
+      type: "boolean",
+      description:
+        "If the pattern is an expression statement, lookup the statement itself, and not the expression",
+    },
+    help: {
+      type: "boolean",
+      description: "Prints help and exit",
+    },
+  },
 } as const;
 
 export const usage = `ESGrep - Syntactically-aware grep for JavaScript and TypeScript
