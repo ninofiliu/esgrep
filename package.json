@@ -20,7 +20,7 @@
     "url": "https://ninofiliu.com"
   },
   "license": "GPL-3.0-only",
-  "bin": "dist/cli/main.js",
+  "bin": "dist/cli/node.js",
   "main": "dist/lib.js",
   "scripts": {
     "build": "rm -rf dist && tsc",

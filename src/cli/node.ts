@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import { find } from "../lib";
 import { readFile } from "fs/promises";
 
 import getArgs from "./getArgs";
 import * as minimist from "minimist";
+import processFile from "./processFile";
 
 const args = getArgs(minimist(process.argv.slice(2)));
 if (args.kind === "error") {
@@ -13,30 +13,19 @@ if (args.kind === "error") {
 
 const { cliOptions, pattern, paths } = args;
 
-const processFile = (path: string | number, content: string) => {
-  for (const match of find(pattern, content, cliOptions)) {
-    console.log(
-      [
-        path,
-        match.loc.start.line,
-        match.loc.start.column,
-        content.slice(match.range[0], match.range[1]),
-      ].join(":")
-    );
-  }
-};
-
 (async () => {
   if (paths.length === 0) {
     const chunks = [];
     // @ts-ignore
     for await (const chunk of process.stdin) chunks.push(chunk);
     const content = Buffer.concat(chunks).toString("utf8");
-    processFile(0, content);
+    for (const chunk of processFile(0, pattern, content, cliOptions))
+      process.stdout.write(chunk);
   } else {
     for (const path of paths) {
       const content = await readFile(path, "utf8");
-      processFile(path, content);
+      for (const chunk of processFile(path, pattern, content, cliOptions))
+        process.stdout.write(chunk);
     }
   }
 })();
