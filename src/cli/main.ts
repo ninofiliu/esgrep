@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { find } from "./lib";
+import { find } from "../lib";
 import { readFile } from "fs/promises";
 
 import getArgs from "./getArgs";

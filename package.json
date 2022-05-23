@@ -20,10 +20,10 @@
     "url": "https://ninofiliu.com"
   },
   "license": "GPL-3.0-only",
-  "bin": "dist/cli.js",
+  "bin": "dist/cli/main.js",
   "main": "dist/lib.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "test": "jest",
     "tdd": "jest --watch"
   },

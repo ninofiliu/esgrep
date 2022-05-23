@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import { CliOptions, partialCliOptionsSchema } from "./types";
+import { CliOptions, partialCliOptionsSchema } from "../types";
 
 type Args =
   | { kind: "error"; toLog: any[] }
