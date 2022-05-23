@@ -15,8 +15,14 @@ const { cliOptions, pattern, paths } = args;
 
 const processFile = (path: string | number, content: string) => {
   for (const match of find(pattern, content, cliOptions)) {
-    // TODO
-    console.log({ path, match });
+    console.log(
+      [
+        path,
+        match.loc.start.line,
+        match.loc.start.column,
+        content.slice(match.range[0], match.range[1]),
+      ].join(":")
+    );
   }
 };
 
