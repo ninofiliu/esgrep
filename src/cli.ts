@@ -2,74 +2,19 @@
 import { find } from "./lib";
 import { readFile } from "fs/promises";
 
+import getArgs from "./getArgs";
 import * as minimist from "minimist";
-import Ajv from "ajv";
-import { CliOptions, partialCliOptionsSchema } from "./types";
 
-const {
-  _: [needle, ...paths],
-  ...options
-} = minimist(process.argv.slice(2));
-
-const aliases = {
-  s: "statement",
-  h: "help",
-} as const;
-const reversedAliases = {
-  statement: "s",
-  help: "h",
-} as const;
-
-const validateOptions = (): CliOptions | undefined => {
-  const dealiasedOptions = Object.fromEntries(
-    Object.entries(options).map(([key, value]) => [aliases[key] || key, value])
-  );
-
-  const ajv = new Ajv({ allErrors: true });
-  const valid = ajv.validate(partialCliOptionsSchema, dealiasedOptions);
-  if (!valid) {
-    console.log("ESGrep command line options did not pass validation");
-    console.log("You passed the options:", dealiasedOptions);
-    console.log(
-      "AJV found these validation errors:",
-      ajv.errorsText(ajv.errors)
-    );
-    return;
-  }
-  return dealiasedOptions as CliOptions;
-};
-
-const validOptions = validateOptions();
-if (!validOptions) process.exit(1);
-
-const usage = `ESGrep - Syntactically-aware grep for JavaScript and TypeScript
-
-Usage: esgrep [OPTION...] NEEDLE [FILE...]
-
-Positional arguments:
-  NEEDLE: Javascript or typescript statement to match
-  FILE: Path to files to lookup the files in. If none is specified, read from stdin
-        
-Options:
-${Object.entries(partialCliOptionsSchema.properties)
-  .map(
-    ([option, { description }]) =>
-      `  -${reversedAliases[option]}, --${option}: ${description}`
-  )
-  .join("\n")}`;
-
-if (validOptions.help) {
-  console.log(usage);
+const args = getArgs(minimist(process.argv.slice(2)));
+if (args.kind === "error") {
+  for (const msg of args.toLog) console.log(msg);
   process.exit(1);
 }
 
-if (!needle) {
-  console.log("NEEDLE positional argument is required");
-  process.exit(1);
-}
+const { cliOptions, needle, paths } = args;
 
 const processFile = (path: string | number, content: string) => {
-  for (const match of find(needle, content)) {
+  for (const match of find(needle, content, cliOptions)) {
     // TODO
     console.log({ path, match });
   }

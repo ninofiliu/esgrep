@@ -1,0 +1,81 @@
+import getArgs, { usage } from "./getArgs";
+
+describe("getArgs", () => {
+  describe("empty argv", () => {
+    it("should fail and log error", () => {
+      expect(getArgs({ _: [] })).toEqual({ kind: "error", toLog: [usage] });
+    });
+  });
+  describe("-h", () => {
+    it("should fail and log error", () => {
+      expect(getArgs({ _: [], h: true })).toEqual({
+        kind: "error",
+        toLog: [usage],
+      });
+    });
+  });
+  describe("--help", () => {
+    it("should fail and log error", () => {
+      expect(getArgs({ _: [], help: true })).toEqual({
+        kind: "error",
+        toLog: [usage],
+      });
+    });
+  });
+  describe("valid options but no needle", () => {
+    it("should fail and log error", () => {
+      expect(getArgs({ _: [], statement: true })).toEqual({
+        kind: "error",
+        toLog: [usage],
+      });
+    });
+  });
+  describe("unknown option", () => {
+    it("should fail and log why", () => {
+      expect(getArgs({ _: ["Neenee the needle"], makeCoffee: true })).toEqual({
+        kind: "error",
+        toLog: [
+          "ESGrep command line options did not pass validation. You passed:",
+          { makeCoffee: true },
+          "But this is invalid because data must NOT have additional properties. Use --help for an options overview or check the online docs for more.",
+        ],
+      });
+    });
+  });
+  describe("invalid option", () => {
+    it("should fail and log why", () => {
+      expect(
+        getArgs({
+          _: ["Neenee the needle"],
+          statement: "Слава Україні!",
+        })
+      ).toEqual({
+        kind: "error",
+        toLog: [
+          "ESGrep command line options did not pass validation. You passed:",
+          { statement: "Слава Україні!" },
+          "But this is invalid because data/statement must be boolean. Use --help for an options overview or check the online docs for more.",
+        ],
+      });
+    });
+  });
+  describe("valid options and positional arguments", () => {
+    it("should parse and pass them", () => {
+      expect(
+        getArgs({
+          _: [
+            "Neenee the needle",
+            "Pablo the first path",
+            "Pablito the second path",
+          ],
+          statement: true,
+        })
+      ).toEqual({
+        cliOptions: { statement: true },
+        kind: "success",
+        needle: "Neenee the needle",
+        paths: ["Pablo the first path", "Pablito the second path"],
+      });
+    });
+  });
+});
