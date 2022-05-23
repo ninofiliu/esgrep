@@ -23,7 +23,7 @@
   "bin": "dist/cli/node.js",
   "main": "dist/lib.js",
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "test": "jest",
     "tdd": "jest --watch"
   },
