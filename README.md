@@ -93,6 +93,20 @@ Prints the synopsis and lists CLI options.
 esgrep -h
 ```
 
+### `-t, --ts`
+
+Include type annotations in the comparison
+
+```ts
+import { findStrings } from "esgrep";
+
+const withTS = "const x: number = 10";
+const withoutTS = "const x = 10";
+
+console.log([...findStrings(withoutTS, withTS)]); // [ 'const x: number = 10' ]
+console.log([...findStrings(withoutTS, withTS, { ts: true })]); // []
+```
+
 ### `-s, --statement`
 
 If the pattern is an expression statement, lookup the statement itself, and not the expression statement.

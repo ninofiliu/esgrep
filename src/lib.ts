@@ -20,7 +20,7 @@ function* dfs(obj: unknown): Generator<Node> {
   }
 }
 
-const matches = (value: unknown, target: unknown) => {
+const matches = (value: unknown, target: unknown, options: FindOptions) => {
   if (value === null || typeof value !== "object") return value === target;
   if (target === null || typeof target !== "object") return false;
 
@@ -28,14 +28,20 @@ const matches = (value: unknown, target: unknown) => {
     if (!Array.isArray(target)) return false;
     return (
       value.length === target.length &&
-      value.every((item, i) => matches(item, target[i]))
+      value.every((item, i) => matches(item, target[i], options))
     );
   } else {
     if (Array.isArray(target)) return false;
     const keys = new Set([...Object.keys(value), ...Object.keys(target)]);
-    keys.delete("range");
-    keys.delete("loc");
-    return [...keys].every((key) => matches(value[key], target[key]));
+    if (isNode(value)) {
+      if (!isNode(target)) return false;
+      keys.delete("range");
+      keys.delete("loc");
+      if (!options.ts) {
+        keys.delete("typeAnnotation");
+      }
+    }
+    return [...keys].every((key) => matches(value[key], target[key], options));
   }
 };
 
@@ -46,6 +52,7 @@ export function* find(
 ) {
   const fullOptions: FindOptions = {
     statement: false,
+    ts: false,
     ...options,
   };
 
@@ -61,7 +68,7 @@ export function* find(
   const haystackAst = parse(haystack, { loc: true, range: true });
 
   for (const walked of dfs(haystackAst.body)) {
-    if (matches(walked, target)) {
+    if (matches(walked, target, fullOptions)) {
       yield walked;
     }
   }

@@ -11,27 +11,33 @@ type Args =
     };
 
 const aliases = {
-  s: "statement",
   h: "help",
+  t: "ts",
+  s: "statement",
 } as const;
 
 const reversedAliases = {
-  statement: "s",
   help: "h",
+  ts: "t",
+  statement: "s",
 } as const;
 
 const partialCliOptionsSchema = {
   type: "object",
   additionalProperties: false,
   properties: {
+    help: {
+      type: "boolean",
+      description: "Prints help and exit",
+    },
+    ts: {
+      type: "boolean",
+      description: "Include type annotations in the comparison",
+    },
     statement: {
       type: "boolean",
       description:
         "If the pattern is an expression statement, lookup the statement itself, and not the expression",
-    },
-    help: {
-      type: "boolean",
-      description: "Prints help and exit",
     },
   },
 } as const;

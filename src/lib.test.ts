@@ -58,7 +58,7 @@ describe("inside blocks", () => {
 });
 
 describe("options", () => {
-  describe("expressionOnly", () => {
+  describe("statement", () => {
     const expressions = [`10`, `await fetch()`, `foo`, `"hello"`];
     const statementers: ((s: string) => string)[] = [
       (s) => `const x = ${s}`,
@@ -99,6 +99,29 @@ describe("options", () => {
             ]).toEqual([statement]);
           }
         }
+      });
+    });
+  });
+
+  describe("ts", () => {
+    const withTS = "const x: number = 10;";
+    const withoutTS = "const x = 10;";
+    describe("false (default)", () => {
+      it("should match regardless of type annotations", () => {
+        expect([...findStrings(withTS, withoutTS)]).toEqual([withoutTS]);
+        expect([...findStrings(withoutTS, withTS)]).toEqual([withTS]);
+      });
+    });
+    describe("true", () => {
+      it("should not match if type annotations differ", () => {
+        expect([...findStrings(withTS, withTS, { ts: true })]).toEqual([
+          withTS,
+        ]);
+        expect([...findStrings(withTS, withoutTS, { ts: true })]).toEqual([]);
+        expect([...findStrings(withoutTS, withTS, { ts: true })]).toEqual([]);
+        expect([...findStrings(withoutTS, withoutTS, { ts: true })]).toEqual([
+          withoutTS,
+        ]);
       });
     });
   });
