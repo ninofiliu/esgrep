@@ -22,7 +22,7 @@ describe("getArgs", () => {
       });
     });
   });
-  describe("valid options but no needle", () => {
+  describe("valid options but no pattern", () => {
     it("should fail and log error", () => {
       expect(getArgs({ _: [], statement: true })).toEqual({
         kind: "error",
@@ -32,7 +32,7 @@ describe("getArgs", () => {
   });
   describe("unknown option", () => {
     it("should fail and log why", () => {
-      expect(getArgs({ _: ["Neenee the needle"], makeCoffee: true })).toEqual({
+      expect(getArgs({ _: ["Neenee the pattern"], makeCoffee: true })).toEqual({
         kind: "error",
         toLog: [
           "ESGrep command line options did not pass validation. You passed:",
@@ -46,7 +46,7 @@ describe("getArgs", () => {
     it("should fail and log why", () => {
       expect(
         getArgs({
-          _: ["Neenee the needle"],
+          _: ["Neenee the pattern"],
           statement: "Слава Україні!",
         })
       ).toEqual({
@@ -64,7 +64,7 @@ describe("getArgs", () => {
       expect(
         getArgs({
           _: [
-            "Neenee the needle",
+            "Neenee the pattern",
             "Pablo the first path",
             "Pablito the second path",
           ],
@@ -73,7 +73,7 @@ describe("getArgs", () => {
       ).toEqual({
         cliOptions: { statement: true },
         kind: "success",
-        needle: "Neenee the needle",
+        pattern: "Neenee the pattern",
         paths: ["Pablo the first path", "Pablito the second path"],
       });
     });

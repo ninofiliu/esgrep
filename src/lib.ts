@@ -40,7 +40,7 @@ const matches = (value: unknown, target: unknown) => {
 };
 
 export function* find(
-  needle: string,
+  pattern: string,
   haystack: string,
   options: Partial<FindOptions> = {}
 ) {
@@ -49,14 +49,14 @@ export function* find(
     ...options,
   };
 
-  const needleAst = parse(needle);
-  if (needleAst.body.length !== 1)
-    throw new Error("Needle body does not contain exactly one statement");
-  const needleStatement = needleAst.body[0];
+  const patternAst = parse(pattern);
+  if (patternAst.body.length !== 1)
+    throw new Error("Pattern body does not contain exactly one statement");
+  const patternStatement = patternAst.body[0];
   const target =
-    !fullOptions.statement && needleStatement.type === "ExpressionStatement"
-      ? needleStatement.expression
-      : needleStatement;
+    !fullOptions.statement && patternStatement.type === "ExpressionStatement"
+      ? patternStatement.expression
+      : patternStatement;
 
   const haystackAst = parse(haystack, { loc: true, range: true });
 
@@ -68,11 +68,11 @@ export function* find(
 }
 
 export function* findStrings(
-  needle: string,
+  pattern: string,
   haystack: string,
   options: Partial<FindOptions> = {}
 ) {
-  for (const found of find(needle, haystack, options)) {
+  for (const found of find(pattern, haystack, options)) {
     yield haystack.slice(found.range[0], found.range[1]);
   }
 }

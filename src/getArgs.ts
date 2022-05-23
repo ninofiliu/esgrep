@@ -1,7 +1,3 @@
-import { find } from "./lib";
-import { readFile } from "fs/promises";
-
-import * as minimist from "minimist";
 import Ajv from "ajv";
 import { CliOptions, partialCliOptionsSchema } from "./types";
 
@@ -10,7 +6,7 @@ type Args =
   | {
       kind: "success";
       cliOptions: CliOptions;
-      needle: string;
+      pattern: string;
       paths: string[];
     };
 
@@ -26,10 +22,10 @@ const reversedAliases = {
 
 export const usage = `ESGrep - Syntactically-aware grep for JavaScript and TypeScript
 
-Usage: esgrep [OPTION...] NEEDLE [FILE...]
+Usage: esgrep [OPTION...] PATTERN [FILE...]
 
 Positional arguments:
-  NEEDLE: Javascript or typescript statement to match
+  PATTERN: Javascript or typescript statement to match
   FILE: Path to files to lookup the files in. If none is specified, read from stdin
         
 Options:
@@ -45,7 +41,7 @@ const docText =
 
 export default (minimisted: { _: string[]; [key: string]: any }): Args => {
   const {
-    _: [needle, ...paths],
+    _: [pattern, ...paths],
     ...options
   } = minimisted;
 
@@ -53,7 +49,7 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
     Object.entries(options).map(([key, value]) => [aliases[key] || key, value])
   );
 
-  if (dealiasedOptions.help || needle === undefined) {
+  if (dealiasedOptions.help || pattern === undefined) {
     return {
       kind: "error",
       toLog: [usage],
@@ -78,7 +74,7 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
   return {
     kind: "success",
     cliOptions,
-    needle,
+    pattern,
     paths,
   };
 };

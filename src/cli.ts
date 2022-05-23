@@ -11,10 +11,10 @@ if (args.kind === "error") {
   process.exit(1);
 }
 
-const { cliOptions, needle, paths } = args;
+const { cliOptions, pattern, paths } = args;
 
 const processFile = (path: string | number, content: string) => {
-  for (const match of find(needle, content, cliOptions)) {
+  for (const match of find(pattern, content, cliOptions)) {
     // TODO
     console.log({ path, match });
   }

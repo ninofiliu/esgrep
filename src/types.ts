@@ -11,7 +11,7 @@ export const partialCliOptionsSchema = {
     statement: {
       type: "boolean",
       description:
-        "If the needle is an expression statement, lookup the statement itself, and not the expression",
+        "If the pattern is an expression statement, lookup the statement itself, and not the expression",
     },
     help: {
       type: "boolean",
