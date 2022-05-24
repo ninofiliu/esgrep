@@ -4,24 +4,55 @@ Syntactically-aware grep for JavaScript and TypeScript
 
 ## Usage as a CLI
 
-Install it with `npm install --global esgrep` or the equivalent using pnpm/yarn/etc, then use it as `esgrep [OPTION...] PATTERN [FILE...]`. If not `FILE` is precised, reads from stdin. Examples:
+Install it with `npm install --global esgrep` or the equivalent using pnpm/yarn/etc, then use it as `esgrep [OPTION...] PATTERN [FILE...]`. If `FILE` is not precised, reads from stdin.
 
-```ts
-// ./example.ts
-let x = 10;
-const add = () => {
-  x++;
-};
-```
+The CLI is basically a wrapper around the `find` lib function and accepts the same [options](#options) and a few more that handle help print and output format. This means that these are logically equivalent:
+
+Reading from stdin:
 
 ```sh
-esgrep 'let x = 10' example.ts
-cat example.ts | esgrep 'let x = 10'
-esgrep 'let x = 10' example.ts --statement
-esgrep --statement -- 'let x = 10' example.ts
+echo 'const x: number = 10' | esgrep 'const x = ES_ANY'
 ```
 
-The CLI is basically a wrapper around the `find` lib function and accepts the same [options](#options) and a few more that handle help print and output format.
+```ts
+find("const x: number = 10", "const x = ES_ANY");
+```
+
+Reading from files:
+
+```sh
+esgrep 'fetch(ES_ANY, { method: "POST" })' api.js lib.ts
+```
+
+```ts
+find('fetch(ES_ANY, { method: "POST" })', readFileSomehow("api.js"));
+find('fetch(ES_ANY, { method: "POST" })', readFileSomehow("lib.ts"));
+```
+
+Passing arguments:
+
+```sh
+esgrep --statement -- '(() => {})()' file.js
+```
+
+```ts
+find("(() => {})()", readFileSomehow("file.js"), { statement: true });
+```
+
+> **Note**
+>
+> When you pass `esgrep --foo bar baz`, `esgrep` has no way to know whether `bar` is the value of `--foo` (current behavior) or if it is a positional argument just like `baz` and `--foo` is a flag option.
+>
+> You can tell `esgrep` to explicitly start parsing positional arguments by using `--`:
+>
+> ```sh
+> esgrep --foo bar baz
+> # Parsed options: { foo: 'bar' }
+> # Parsed positional arguments: ['baz']
+> esgrep --foo -- bar baz
+> # Parsed options: { foo: true }
+> # parsed positional arguments: ['bar', 'baz']
+> ```
 
 ## Usage as a library
 
