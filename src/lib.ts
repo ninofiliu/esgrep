@@ -40,6 +40,7 @@ const matches = (value: unknown, target: unknown, options: FindOptions) => {
       if (!options.ts) {
         keys.delete("typeAnnotation");
       }
+      if (value.type === "Identifier" && value.name === "ES_ANY") return true;
     }
     return [...keys].every((key) => matches(value[key], target[key], options));
   }
@@ -60,16 +61,16 @@ export function* find(
   if (patternAst.body.length !== 1)
     throw new Error("Pattern body does not contain exactly one statement");
   const patternStatement = patternAst.body[0];
-  const target =
+  const value =
     !fullOptions.statement && patternStatement.type === "ExpressionStatement"
       ? patternStatement.expression
       : patternStatement;
 
   const haystackAst = parse(haystack, { loc: true, range: true });
 
-  for (const walked of dfs(haystackAst.body)) {
-    if (matches(walked, target, fullOptions)) {
-      yield walked;
+  for (const target of dfs(haystackAst.body)) {
+    if (matches(value, target, fullOptions)) {
+      yield target;
     }
   }
 }

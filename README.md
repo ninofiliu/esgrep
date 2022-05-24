@@ -153,11 +153,38 @@ console.log([...findStrings(pattern, haystack, { statement: true })]);
 // []
 ```
 
-The first search matches the `10` in `const x = 10` because it looks up all _expressions_ of `10`. In plain English, it looks up all the occurrences of "just" the number 10. That is the most intuitive and default behavior.
+> **Note**
+> The first search matches the `10` in `const x = 10` because it looks up all _expressions_ of `10`. In plain English, it looks up all the occurrences of "just" the number 10. That is the most intuitive and default behavior.
+>
+> The second search does not match the `10` in `const x = 10` because it looks up all _statements_ of consisting of only the _expression_ `10`. In plain English, statements are anything that makes the exact same sense when adding a `;` at the end.
+>
+> The difference is subtle and it usually takes people not familiar with the concept a few articles to have a good grasp on _statements_ vs _expressions_. Why not start with [this one](https://2ality.com/2012/09/expressions-vs-statements.html)?
 
-The second search does not match the `10` in `const x = 10` because it looks up all _statements_ of consisting of only the _expression_ `10`. In plain English, statements are anything that makes the exact same sense when adding a `;` at the end.
+## ES Expressions
 
-The difference is subtle and it usually takes people not familiar with the concept a few articles to have a good grasp on _statements_ vs _expressions_. Why not start with [this one](https://2ality.com/2012/09/expressions-vs-statements.html)?
+Additionally to its options, patterns are allowed to be flexible thanks to ES expressions - special expressions that allow for something else than perfect matches.
+
+### `ES_ANY`
+
+Matches anything
+
+```ts
+import { findStrings } from "esgrep";
+
+console.log([...findStrings("ES_ANY", "fn('foo', 'bar')")]);
+// [
+//   "fn('foo', 'bar')", // matches the expression
+//   "fn('foo', 'bar')", // matches the statement (string is the same, not the node)
+//   "fn",
+//   "'foo'",
+//   "'bar'"
+// ];
+console.log([...findStrings("x = ES_ANY", "x = 10; x = 'hello'")]);
+// [
+//   "x = 10",
+//   "x = 'hello'"
+// ];
+```
 
 ## About
 

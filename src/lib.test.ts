@@ -17,6 +17,16 @@ describe("with exact matches", () => {
   });
 });
 
+describe("with several exact matches", () => {
+  it("should find itself several times", () => {
+    for (const statement of statements) {
+      expect([
+        ...findStrings(statement, [statement, statement, statement].join("\n")),
+      ]).toEqual([statement, statement, statement]);
+    }
+  });
+});
+
 describe("with white space diff", () => {
   it("should find itself", () => {
     for (const statement of statements) {
@@ -123,6 +133,27 @@ describe("options", () => {
           withoutTS,
         ]);
       });
+    });
+  });
+});
+
+describe("ES expressions", () => {
+  describe("ES_ANY", () => {
+    it("should match anything", () => {
+      expect([...findStrings("ES_ANY", "function fn() { foo(); }")]).toEqual([
+        "function fn() { foo(); }",
+        "fn",
+        "{ foo(); }",
+        "foo();",
+        "foo()",
+        "foo",
+      ]);
+      expect([
+        ...findStrings("const x = ES_ANY", "const x = 10; const x = 20;"),
+      ]).toEqual(["const x = 10;", "const x = 20;"]);
+      expect([...findStrings("fetch(ES_ANY)", "fetch('url')")]).toEqual([
+        "fetch('url')",
+      ]);
     });
   });
 });
