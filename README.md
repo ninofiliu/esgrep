@@ -6,7 +6,7 @@ Syntactically-aware grep for JavaScript and TypeScript
 
 Install it with `npm install --global esgrep` or the equivalent using pnpm/yarn/etc, then use it as `esgrep [OPTION...] PATTERN [FILE...]`. If `FILE` is not precised, reads from stdin.
 
-The CLI is basically a wrapper around the `find` lib function and accepts the same [options](#options) and a few more that handle help print and output format. This means that these are logically equivalent:
+The CLI is basically a wrapper around [`find`](#findpattern-haystack-options) and accepts the same [options](#options) and a few more that handle help print and output format. This means that these are logically equivalent:
 
 Reading from stdin:
 
@@ -94,7 +94,7 @@ for (const match of matches) {
 }
 ```
 
-If you're not comfortable with generators and don't want to use the perf and streaming capabilities they can provide, you can just spread it out into a plain array:
+If you're not comfortable with generators or don't want to use the perf and streaming capabilities they can provide, you can just spread it out into a plain array:
 
 ```ts
 console.log([...matches]);
