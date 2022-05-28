@@ -135,6 +135,30 @@ describe("options", () => {
       });
     });
   });
+
+  describe("raw", () => {
+    const strings = [`"foo\\"bar'baz"`, `'foo"bar\\'baz'`, "`foo\"bar'baz`"];
+    describe("false (default)", () => {
+      it("should match the same strings written differently", () => {
+        for (const sa of strings) {
+          for (const sb of strings) {
+            expect([...findStrings(sa, sb)]).toEqual([sb]);
+          }
+        }
+      });
+    });
+    describe("true", () => {
+      it("should not match the same strings written differently", () => {
+        for (const sa of strings) {
+          for (const sb of strings) {
+            expect([...findStrings(sa, sb, { raw: true })]).toEqual(
+              sa === sb ? [sb] : []
+            );
+          }
+        }
+      });
+    });
+  });
 });
 
 describe("ES expressions", () => {

@@ -134,8 +134,28 @@ import { findStrings } from "esgrep";
 const withTS = "const x: number = 10";
 const withoutTS = "const x = 10";
 
-console.log([...findStrings(withoutTS, withTS)]); // [ 'const x: number = 10' ]
-console.log([...findStrings(withoutTS, withTS, { ts: true })]); // []
+console.log([...findStrings(withoutTS, withTS)]);
+// [ 'const x: number = 10' ]
+console.log([...findStrings(withoutTS, withTS, { ts: true })]);
+// []
+```
+
+### `-r, --raw`
+
+Differentiate between strings in single quotes, double quotes, and template literals
+
+```ts
+import { findStrings } from "esgrep";
+
+const haystack = `
+const single = 'hello';
+const double = "hello";
+const template = \`hello\`
+`;
+console.log([...findStrings('"hello"', haystack)]);
+// [ "'hello'", '"hello"', '`hello`' ]
+console.log([...findStrings('"hello"', haystack, { raw: true })]);
+// [ "'hello'" ]
 ```
 
 ### `-s, --statement`

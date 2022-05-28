@@ -14,12 +14,14 @@ const aliases = {
   h: "help",
   t: "ts",
   s: "statement",
+  r: "raw",
 } as const;
 
 const reversedAliases = {
   help: "h",
   ts: "t",
   statement: "s",
+  raw: "r",
 } as const;
 
 const partialCliOptionsSchema = {

@@ -20,6 +20,14 @@ function* dfs(obj: unknown): Generator<Node> {
   }
 }
 
+const uniformizeTemplate = (value: object) => {
+  if (!isNode(value)) return value;
+  if (value.type !== "TemplateLiteral") return value;
+  if (value.quasis.length > 1) return value;
+
+  return { type: "Literal", value: value.quasis[0].value.cooked };
+};
+
 const matches = (value: unknown, target: unknown, options: FindOptions) => {
   if (value === null || typeof value !== "object") return value === target;
   if (target === null || typeof target !== "object") return false;
@@ -32,17 +40,29 @@ const matches = (value: unknown, target: unknown, options: FindOptions) => {
     );
   } else {
     if (Array.isArray(target)) return false;
-    const keys = new Set([...Object.keys(value), ...Object.keys(target)]);
-    if (isNode(value)) {
-      if (!isNode(target)) return false;
+    let cValue = value;
+    let cTarget = target;
+    if (!options.raw) {
+      cValue = uniformizeTemplate(cValue);
+      cTarget = uniformizeTemplate(cTarget);
+    }
+
+    const keys = new Set([...Object.keys(cValue), ...Object.keys(cTarget)]);
+    if (isNode(cValue)) {
+      if (!isNode(cTarget)) return false;
+      if (!options.raw) {
+        keys.delete("raw");
+      }
       keys.delete("range");
       keys.delete("loc");
       if (!options.ts) {
         keys.delete("typeAnnotation");
       }
-      if (value.type === "Identifier" && value.name === "ES_ANY") return true;
+      if (cValue.type === "Identifier" && cValue.name === "ES_ANY") return true;
     }
-    return [...keys].every((key) => matches(value[key], target[key], options));
+    return [...keys].every((key) =>
+      matches(cValue[key], cTarget[key], options)
+    );
   }
 };
 
@@ -54,6 +74,7 @@ export function* find(
   const fullOptions: FindOptions = {
     statement: false,
     ts: false,
+    raw: false,
     ...options,
   };
 
