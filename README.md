@@ -223,6 +223,22 @@ console.log([...findStrings(pattern, haystack)]);
 // [ "const x = 'hello'" ]
 ```
 
+### `ES_SOME`
+
+Matches if at least one expression passed as argument matches
+
+```ts
+import { findStrings } from "esgrep";
+
+const pattern = `const x = ES_SOME(
+  "hello",
+  "goodbye"
+)`;
+const haystack = "const x = 'hello'";
+console.log([...findStrings(pattern, haystack)]);
+// [ "const x = 'hello'" ]
+```
+
 ## About
 
 Want to report a bug? Don't understant the doc? Suggest an improvement? Open an issue!

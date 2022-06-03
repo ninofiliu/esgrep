@@ -63,11 +63,11 @@ const matches = (value: unknown, target: unknown, options: FindOptions) => {
       if (
         cValue.type === "CallExpression" &&
         cValue.callee.type === "Identifier" &&
-        cValue.callee.name === "ES_EVERY"
+        (cValue.callee.name === "ES_EVERY" || cValue.callee.name === "ES_SOME")
       ) {
-        return cValue.arguments.every((child) =>
-          matches(child, cTarget, options)
-        );
+        return cValue.arguments[
+          { ES_EVERY: "every", ES_SOME: "some" }[cValue.callee.name]
+        ]((child) => matches(child, cTarget, options));
       }
     }
     return [...keys].every((key) =>

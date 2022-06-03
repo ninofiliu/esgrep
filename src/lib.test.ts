@@ -203,4 +203,27 @@ describe("ES expressions", () => {
       ]).toEqual(["const x = 10"]);
     });
   });
+
+  describe("ES_SOME", () => {
+    it("no options: does not match", () => {
+      expect([...findStrings("const x = ES_SOME()", "const x = 10")]).toEqual(
+        []
+      );
+    });
+    it("no matching option: does not match", () => {
+      expect([
+        ...findStrings("const x = ES_SOME(20, 30)", "const x = 10"),
+      ]).toEqual([]);
+    });
+    it("one matching option: does not match", () => {
+      expect([
+        ...findStrings("const x = ES_SOME(10, 20)", "const x = 10"),
+      ]).toEqual(["const x = 10"]);
+    });
+    it("all matching options: matches", () => {
+      expect([
+        ...findStrings("const x = ES_SOME(10, ES_ANY)", "const x = 10"),
+      ]).toEqual(["const x = 10"]);
+    });
+  });
 });
