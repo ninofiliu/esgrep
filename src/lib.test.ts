@@ -226,4 +226,17 @@ describe("ES expressions", () => {
       ]).toEqual(["const x = 10"]);
     });
   });
+
+  describe("ES_NOT", () => {
+    it("matches first argument: does not match", () => {
+      expect([...findStrings("const x = ES_NOT(10)", "const x = 10")]).toEqual(
+        []
+      );
+    });
+    it("does not match first argument: matches", () => {
+      expect([...findStrings("const x = ES_NOT(10)", "const x = 20")]).toEqual([
+        "const x = 20",
+      ]);
+    });
+  });
 });

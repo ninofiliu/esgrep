@@ -62,12 +62,20 @@ const matches = (value: unknown, target: unknown, options: FindOptions) => {
       if (cValue.type === "Identifier" && cValue.name === "ES_ANY") return true;
       if (
         cValue.type === "CallExpression" &&
-        cValue.callee.type === "Identifier" &&
-        (cValue.callee.name === "ES_EVERY" || cValue.callee.name === "ES_SOME")
+        cValue.callee.type === "Identifier"
       ) {
-        return cValue.arguments[
-          { ES_EVERY: "every", ES_SOME: "some" }[cValue.callee.name]
-        ]((child) => matches(child, cTarget, options));
+        switch (cValue.callee.name) {
+          case "ES_EVERY":
+            return cValue.arguments.every((child) =>
+              matches(child, cTarget, options)
+            );
+          case "ES_SOME":
+            return cValue.arguments.some((child) =>
+              matches(child, cTarget, options)
+            );
+          case "ES_NOT":
+            return !matches(cValue.arguments[0], cTarget, options);
+        }
       }
     }
     return [...keys].every((key) =>

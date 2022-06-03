@@ -206,6 +206,19 @@ console.log([...findStrings("x = ES_ANY", "x = 10; x = 'hello'")]);
 // ];
 ```
 
+### `ES_NOT`
+
+Matches anything but the first argument
+
+```ts
+import { findStrings } from "esgrep";
+
+const pattern = "const x = ES_NOT(10)";
+const haystack = "const x = 20";
+console.log([...findStrings(pattern, haystack)]);
+// [ 'const x = 20' ]
+```
+
 ### `ES_EVERY`
 
 Matches if all expressions passed as argument match
