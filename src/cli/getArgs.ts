@@ -65,9 +65,6 @@ ${Object.entries(partialCliOptionsSchema.properties)
   )
   .join("\n")}`;
 
-const docText =
-  "Use --help for an options overview or check the online docs for more.";
-
 export default (minimisted: { _: string[]; [key: string]: any }): Args => {
   const {
     _: [pattern, ...paths],
@@ -106,7 +103,9 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
       toLog: [
         "ESGrep command line options did not pass validation. You passed:",
         dealiasedOptions,
-        `But this is invalid because ${ajv.errorsText(ajv.errors)}. ${docText}`,
+        `But this is invalid because ${ajv.errorsText(
+          ajv.errors
+        )}. Use --help for an options overview or check the online docs for more.`,
       ],
     };
   }
