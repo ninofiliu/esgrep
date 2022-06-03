@@ -36,6 +36,11 @@ const partialCliOptionsSchema = {
       type: "boolean",
       description: "Include type annotations in the comparison",
     },
+    raw: {
+      type: "boolean",
+      description:
+        "Differentiate between strings in single quotes, double quotes, and template literals",
+    },
     statement: {
       type: "boolean",
       description:
