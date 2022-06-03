@@ -180,4 +180,27 @@ describe("ES expressions", () => {
       ]);
     });
   });
+
+  describe("ES_EVERY", () => {
+    it("no options: matches", () => {
+      expect([...findStrings("const x = ES_EVERY()", "const x = 10")]).toEqual([
+        "const x = 10",
+      ]);
+    });
+    it("no matching option: does not match", () => {
+      expect([
+        ...findStrings("const x = ES_EVERY(20, 30)", "const x = 10"),
+      ]).toEqual([]);
+    });
+    it("one matching option: does not match", () => {
+      expect([
+        ...findStrings("const x = ES_EVERY(10, 20)", "const x = 10"),
+      ]).toEqual([]);
+    });
+    it("all matching options: matches", () => {
+      expect([
+        ...findStrings("const x = ES_EVERY(10, ES_ANY)", "const x = 10"),
+      ]).toEqual(["const x = 10"]);
+    });
+  });
 });

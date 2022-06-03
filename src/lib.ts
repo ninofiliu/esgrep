@@ -58,7 +58,17 @@ const matches = (value: unknown, target: unknown, options: FindOptions) => {
       if (!options.ts) {
         keys.delete("typeAnnotation");
       }
+
       if (cValue.type === "Identifier" && cValue.name === "ES_ANY") return true;
+      if (
+        cValue.type === "CallExpression" &&
+        cValue.callee.type === "Identifier" &&
+        cValue.callee.name === "ES_EVERY"
+      ) {
+        return cValue.arguments.every((child) =>
+          matches(child, cTarget, options)
+        );
+      }
     }
     return [...keys].every((key) =>
       matches(cValue[key], cTarget[key], options)

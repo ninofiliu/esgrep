@@ -206,6 +206,23 @@ console.log([...findStrings("x = ES_ANY", "x = 10; x = 'hello'")]);
 // ];
 ```
 
+### `ES_EVERY`
+
+Matches if all expressions passed as argument match
+
+```ts
+import { findStrings } from "esgrep";
+
+const pattern = `const x = ES_EVERY(
+  'hello',
+  "hello",
+  ES_ANY
+)`;
+const haystack = "const x = 'hello'";
+console.log([...findStrings(pattern, haystack)]);
+// [ "const x = 'hello'" ]
+```
+
 ## About
 
 Want to report a bug? Don't understant the doc? Suggest an improvement? Open an issue!
