@@ -63,7 +63,8 @@ ${Object.entries(partialCliOptionsSchema.properties)
     ([option, { description }]) =>
       `  -${reversedAliases[option]}, --${option}: ${description}`
   )
-  .join("\n")}`;
+  .join("\n")}
+`;
 
 export default (minimisted: { _: string[]; [key: string]: any }): Args => {
   const {
