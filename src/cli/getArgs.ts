@@ -1,8 +1,8 @@
 import Ajv from "ajv";
-import { CliOptions } from "../types";
+import { CliOptions, Minimisted } from "../types";
 
 type Args =
-  | { kind: "error"; toLog: any[] }
+  | { kind: "error"; toLog: string[] }
   | {
       kind: "success";
       cliOptions: CliOptions;
@@ -15,6 +15,7 @@ const aliases = {
   t: "ts",
   s: "statement",
   r: "raw",
+  f: "format",
 } as const;
 
 const reversedAliases = {
@@ -22,7 +23,16 @@ const reversedAliases = {
   ts: "t",
   statement: "s",
   raw: "r",
+  format: "f",
 } as const;
+
+const defaultCliOptions: CliOptions = {
+  format: "compact",
+  help: false,
+  raw: false,
+  statement: false,
+  ts: false,
+};
 
 const partialCliOptionsSchema = {
   type: "object",
@@ -31,6 +41,10 @@ const partialCliOptionsSchema = {
     help: {
       type: "boolean",
       description: "Prints help and exit",
+    },
+    format: {
+      enum: ["jsonl", "compact"],
+      description: "Output format, one of compact (default), jsonl",
     },
     ts: {
       type: "boolean",
@@ -66,13 +80,13 @@ ${Object.entries(partialCliOptionsSchema.properties)
   .join("\n")}
 `;
 
-export default (minimisted: { _: string[]; [key: string]: any }): Args => {
+export default (minimisted: Minimisted): Args => {
   const {
     _: [pattern, ...paths],
     ...options
   } = minimisted;
 
-  const dealiasedOptions = Object.fromEntries(
+  const dealiasedOptions: Record<string, any> = Object.fromEntries(
     Object.entries(options).map(([key, value]) => [aliases[key] || key, value])
   );
 
@@ -91,7 +105,7 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
       kind: "error",
       toLog: [
         "Invalid usage: pattern is required. You might fix this by adding -- before your positional arguments. I understood you passed the options:",
-        dealiasedOptions,
+        JSON.stringify(dealiasedOptions),
       ],
     };
   }
@@ -103,7 +117,7 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
       kind: "error",
       toLog: [
         "ESGrep command line options did not pass validation. You passed:",
-        dealiasedOptions,
+        JSON.stringify(dealiasedOptions),
         `But this is invalid because ${ajv.errorsText(
           ajv.errors
         )}. Use --help for an options overview or check the online docs for more.`,
@@ -111,7 +125,10 @@ export default (minimisted: { _: string[]; [key: string]: any }): Args => {
     };
   }
 
-  const cliOptions = dealiasedOptions as CliOptions;
+  const cliOptions = {
+    ...defaultCliOptions,
+    ...(dealiasedOptions as CliOptions),
+  };
 
   return {
     kind: "success",

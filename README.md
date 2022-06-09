@@ -120,8 +120,19 @@ console.log([...findStrings(pattern, haystack)]);
 
 Prints the synopsis and lists CLI options.
 
-```sh
-esgrep -h
+```console
+user@host$ esgrep -h
+```
+
+### `-f, --format {jsonl}` (CLI only)
+
+Defines the output format of the search
+
+`jsonl` (default): prints out lines of the shape `{ path: string, match: Node }` where `Node` is an ESTree node
+
+```console
+user@host$ esgrep user users.ts
+{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[148,152],"loc":{"start":{"line":4,"column":24},"end":{"line":4,"column":28}}}}
 ```
 
 ### `-t, --ts`
