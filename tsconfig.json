@@ -8,6 +8,7 @@
     "sourceMap": true,
     "module": "CommonJS",
     "strictNullChecks": true,
-    "declaration": true
+    "declaration": true,
+    "esModuleInterop": true
   }
 }

@@ -40,6 +40,7 @@
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^5.22.0",
     "ajv": "^8.11.0",
+    "chalk": "4",
     "minimist": "^1.2.6"
   }
 }

@@ -1,6 +1,7 @@
 import getArgs from "./getArgs";
 import { find } from "../lib";
 import { Minimisted } from "../types";
+import chalk from "chalk";
 
 export default async function* main(
   minimisted: Minimisted,
@@ -29,11 +30,16 @@ export default async function* main(
       for (const match of find(pattern, content, cliOptions)) {
         if (cliOptions.format === "pretty") {
           yield [
-            [path, match.loc.start.line, match.loc.start.column].join(":"),
+            chalk.blue(
+              [path, match.loc.start.line, match.loc.start.column].join(":")
+            ),
             ...content
               .split("\n")
               .slice(match.loc.start.line - 1, match.loc.end.line)
-              .map((line, i) => `${match.loc.start.line + i} | ${line}`),
+              .map(
+                (line, i) =>
+                  `${chalk.green(`${match.loc.start.line + i} |`)} ${line}`
+              ),
             "",
           ].join("\n");
         }
