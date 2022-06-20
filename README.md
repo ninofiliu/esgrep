@@ -146,12 +146,34 @@ user@host$ esgrep --format oneline 'const tasks = ES_ANY' src/cli/main.ts
 src/cli/main.ts:18:2:const tasks = paths.length === 0 ? [{ path: "stdin", read: readStdin }] : paths.map((path) => ({ path, read: () => readFile(path) }));
 ```
 
-`jsonl`: prints out lines of the shape `{ path: string, match: Node }` where `Node` is an ESTree node
+`jsonl`: streams out lines of the shape `{ path: string, match: Node }` where `Node` is an ESTree node
 
 ```console
 user@host$ esgrep user users.ts
 {"path":"users.ts","match":{"type":"Identifier","name":"user","range":[148,152],"loc":{"start":{"line":4,"column":24},"end":{"line":4,"column":28}}}}
 ```
+
+`count`: do not show matches, only show the number of matches per file. column-separated
+
+```console
+user@host$ esgrep user ./src/**/*.{ts,js}
+./src/api.js:10
+./src/users.js:4
+./src/types.ts:0
+```
+
+> **Note**
+>
+> It is by design that ESGrep doesn't exactly match Grep output options, either because some option didn't make sense anymore, was not useful, or could be achieved by a little bit of bash-fu
+>
+> - `grep --count ...`: `esgrep --format count ...`
+> - `grep --files-without-match ...`: `esgrep --format count ... | grep ':0$' | cut -d ':' -f 1`
+> - `grep --files-with-matches ...`: `esgrep --format count ... | grep -v ':0$' | cut -d ':' -f 1`
+> - `grep --with-filename ...`: always on
+> - `grep --no-filename ...`: always off
+> - `grep --line-number ...`: always on
+> - `grep --invert-match ...`: not useful
+> - `grep --only-matching ...`: not useful
 
 ### `-t, --ts`
 

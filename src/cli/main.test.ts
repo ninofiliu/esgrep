@@ -65,7 +65,11 @@ describe("--format oneline", () => {
         format: "oneline",
       })
     ).toEqual(
-      'users.ts:2:21:fetch( "/users" )\nusers.ts:9:21:fetch( "/users" )\n'
+      [
+        'users.ts:2:21:fetch( "/users" )',
+        'users.ts:9:21:fetch( "/users" )',
+        "",
+      ].join("\n")
     );
   });
 });
@@ -78,7 +82,24 @@ describe("--format jsonl", () => {
         format: "jsonl",
       })
     ).toEqual(
-      '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[156,160],"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":28}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[165,169],"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":37}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[350,354],"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":30}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[359,363],"loc":{"start":{"line":13,"column":35},"end":{"line":13,"column":39}}}}\n'
+      [
+        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[156,160],"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":28}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[165,169],"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":37}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[350,354],"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":30}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[359,363],"loc":{"start":{"line":13,"column":35},"end":{"line":13,"column":39}}}}',
+        "",
+      ].join("\n")
     );
+  });
+});
+
+describe("--format count", () => {
+  it("$path,$count", async () => {
+    expect(
+      await wrappedMain({
+        _: ["user", "users.ts", "age.ts"],
+        format: "count",
+      })
+    ).toEqual(["users.ts:4", "age.ts:0", ""].join("\n"));
   });
 });

@@ -22,29 +22,34 @@ export default async function* main(
 
   for (const { path, read } of tasks) {
     const content = await read();
-    for (const match of find(pattern, content, cliOptions)) {
-      if (cliOptions.format === "pretty") {
-        yield [
-          [path, match.loc.start.line, match.loc.start.column].join(":"),
-          ...content
-            .split("\n")
-            .slice(match.loc.start.line - 1, match.loc.end.line)
-            .map((line, i) => `${match.loc.start.line + i} | ${line}`),
-          "",
-        ].join("\n");
-      }
-      if (cliOptions.format === "oneline") {
-        yield [
-          path,
-          match.loc.start.line,
-          match.loc.start.column,
-          content
-            .substring(match.range[0], match.range[1])
-            .replace(/\s+/g, " "),
-        ].join(":") + "\n";
-      }
-      if (cliOptions.format === "jsonl") {
-        yield JSON.stringify({ path, match }) + "\n";
+    if (cliOptions.format === "count") {
+      const count = [...find(pattern, content, cliOptions)].length;
+      yield `${path}:${count}\n`;
+    } else {
+      for (const match of find(pattern, content, cliOptions)) {
+        if (cliOptions.format === "pretty") {
+          yield [
+            [path, match.loc.start.line, match.loc.start.column].join(":"),
+            ...content
+              .split("\n")
+              .slice(match.loc.start.line - 1, match.loc.end.line)
+              .map((line, i) => `${match.loc.start.line + i} | ${line}`),
+            "",
+          ].join("\n");
+        }
+        if (cliOptions.format === "oneline") {
+          yield [
+            path,
+            match.loc.start.line,
+            match.loc.start.column,
+            content
+              .substring(match.range[0], match.range[1])
+              .replace(/\s+/g, " "),
+          ].join(":") + "\n";
+        }
+        if (cliOptions.format === "jsonl") {
+          yield JSON.stringify({ path, match }) + "\n";
+        }
       }
     }
   }

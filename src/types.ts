@@ -5,6 +5,6 @@ export type FindOptions = {
 };
 export type CliOptions = FindOptions & {
   help: boolean;
-  format: "pretty" | "oneline" | "jsonl";
+  format: "pretty" | "oneline" | "jsonl" | "count";
 };
 export type Minimisted = { _: string[]; [key: string]: any };
