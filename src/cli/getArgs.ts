@@ -43,8 +43,8 @@ const partialCliOptionsSchema = {
       description: "Prints help and exit",
     },
     format: {
-      enum: ["pretty", "compact", "jsonl"],
-      description: "Output format, one of pretty (default), compact, jsonl",
+      enum: ["pretty", "oneline", "jsonl"],
+      description: "Output format, one of pretty (default), oneline, jsonl",
     },
     ts: {
       type: "boolean",

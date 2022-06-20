@@ -33,7 +33,7 @@ export default async function* main(
           "",
         ].join("\n");
       }
-      if (cliOptions.format === "compact") {
+      if (cliOptions.format === "oneline") {
         yield [
           path,
           match.loc.start.line,

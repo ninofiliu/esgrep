@@ -124,7 +124,7 @@ Prints the synopsis and lists CLI options.
 user@host$ esgrep -h
 ```
 
-### `-f, --format {pretty,compact,jsonl}` (CLI only)
+### `-f, --format {pretty,oneline,jsonl}` (CLI only)
 
 Defines the output format of the search
 
@@ -139,10 +139,10 @@ src/cli/main.ts:18:2
 21 |       : paths.map((path) => ({ path, read: () => readFile(path) }));
 ```
 
-`compact`: streams out lines of the shape `$path:$line$column:$match_in_one_line`
+`oneline`: streams out lines of the shape `$path:$line$column:$match_in_one_line`
 
 ```console
-user@host$ esgrep --format compact 'const tasks = ES_ANY' src/cli/main.ts
+user@host$ esgrep --format oneline 'const tasks = ES_ANY' src/cli/main.ts
 src/cli/main.ts:18:2:const tasks = paths.length === 0 ? [{ path: "stdin", read: readStdin }] : paths.map((path) => ({ path, read: () => readFile(path) }));
 ```
 

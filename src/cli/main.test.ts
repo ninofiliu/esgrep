@@ -57,12 +57,12 @@ describe("--format pretty (default)", () => {
   });
 });
 
-describe("--format compact", () => {
+describe("--format oneline", () => {
   it("$path:$line$column:$match_in_one_line", async () => {
     expect(
       await wrappedMain({
         _: ["fetch(ES_ANY)", "users.ts", "age.ts"],
-        format: "compact",
+        format: "oneline",
       })
     ).toEqual(
       'users.ts:2:21:fetch( "/users" )\nusers.ts:9:21:fetch( "/users" )\n'
