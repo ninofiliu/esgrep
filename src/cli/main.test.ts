@@ -2,12 +2,16 @@ import { Minimisted } from "../types";
 import main from "./main";
 
 const usersHaystack = `const getUserByName = async (name: string) => {
-  const resp = await fetch("/users");
+  const resp = await fetch(
+    "/users"
+  );
   const allUsers = await resp.json();
   return allUsers.find((user) => user.name === name);
 };
 const getUsersByGroup = async (group: number) => {
-  const resp = await fetch("/users");
+  const resp = await fetch(
+    "/users"
+  );
   const allUsers = await resp.json();
   return allUsers.filter((user) => user.groups.includes(group));
 };
@@ -35,6 +39,18 @@ const wrappedMain = async (minimisted: Minimisted) => {
   return ret;
 };
 
+describe("--format compact", () => {
+  it("$path:$line$column:$match_in_one_line", async () => {
+    expect(
+      await wrappedMain({
+        _: ["fetch(ES_ANY)", "users.ts", "age.ts"],
+      })
+    ).toEqual(
+      'users.ts:2:21:fetch( "/users" )\nusers.ts:9:21:fetch( "/users" )\n'
+    );
+  });
+});
+
 describe("--format jsonl", () => {
   it("{ $path, $match }", async () => {
     expect(
@@ -43,7 +59,7 @@ describe("--format jsonl", () => {
         format: "jsonl",
       })
     ).toEqual(
-      '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[148,152],"loc":{"start":{"line":4,"column":24},"end":{"line":4,"column":28}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[157,161],"loc":{"start":{"line":4,"column":33},"end":{"line":4,"column":37}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[334,338],"loc":{"start":{"line":9,"column":26},"end":{"line":9,"column":30}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[343,347],"loc":{"start":{"line":9,"column":35},"end":{"line":9,"column":39}}}}\n'
+      '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[156,160],"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":28}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[165,169],"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":37}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[350,354],"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":30}}}}\n{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[359,363],"loc":{"start":{"line":13,"column":35},"end":{"line":13,"column":39}}}}\n'
     );
   });
 });

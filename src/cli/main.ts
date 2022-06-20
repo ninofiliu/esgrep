@@ -25,7 +25,14 @@ export default async function* main(
       const content = await read();
       for (const match of find(pattern, content, cliOptions)) {
         if (cliOptions.format === "compact") {
-          // TODO
+          yield [
+            path,
+            match.loc.start.line,
+            match.loc.start.column,
+            content
+              .substring(match.range[0], match.range[1])
+              .replace(/\s+/g, " "),
+          ].join(":") + "\n";
         }
         if (cliOptions.format === "jsonl") {
           yield JSON.stringify({ path, match }) + "\n";

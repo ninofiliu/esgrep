@@ -124,11 +124,19 @@ Prints the synopsis and lists CLI options.
 user@host$ esgrep -h
 ```
 
-### `-f, --format {jsonl}` (CLI only)
+### `-f, --format {compact,jsonl}` (CLI only)
 
 Defines the output format of the search
 
-`jsonl` (default): prints out lines of the shape `{ path: string, match: Node }` where `Node` is an ESTree node
+`compact` (default): streams out lines of the shape `$path:$line$column:$match_in_one_line`
+
+```console
+user@host$ esgrep 'fetch(ES_ANY)' users.ts age.ts
+users.ts:2:21:fetch("/users")
+users.ts:9:21:fetch("/user/bob")
+```
+
+`jsonl`: prints out lines of the shape `{ path: string, match: Node }` where `Node` is an ESTree node
 
 ```console
 user@host$ esgrep user users.ts
