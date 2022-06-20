@@ -124,16 +124,26 @@ Prints the synopsis and lists CLI options.
 user@host$ esgrep -h
 ```
 
-### `-f, --format {compact,jsonl}` (CLI only)
+### `-f, --format {pretty,compact,jsonl}` (CLI only)
 
 Defines the output format of the search
 
-`compact` (default): streams out lines of the shape `$path:$line$column:$match_in_one_line`
+`pretty` (default): easy to read output
 
 ```console
-user@host$ esgrep 'fetch(ES_ANY)' users.ts age.ts
-users.ts:2:21:fetch("/users")
-users.ts:9:21:fetch("/user/bob")
+user@host$ esgrep 'const tasks = ES_ANY' src/cli/main.ts
+src/cli/main.ts:18:2
+18 |   const tasks =
+19 |     paths.length === 0
+20 |       ? [{ path: "stdin", read: readStdin }]
+21 |       : paths.map((path) => ({ path, read: () => readFile(path) }));
+```
+
+`compact`: streams out lines of the shape `$path:$line$column:$match_in_one_line`
+
+```console
+user@host$ esgrep --format compact 'const tasks = ES_ANY' src/cli/main.ts
+src/cli/main.ts:18:2:const tasks = paths.length === 0 ? [{ path: "stdin", read: readStdin }] : paths.map((path) => ({ path, read: () => readFile(path) }));
 ```
 
 `jsonl`: prints out lines of the shape `{ path: string, match: Node }` where `Node` is an ESTree node

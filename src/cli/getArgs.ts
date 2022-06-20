@@ -27,7 +27,7 @@ const reversedAliases = {
 } as const;
 
 const defaultCliOptions: CliOptions = {
-  format: "compact",
+  format: "pretty",
   help: false,
   raw: false,
   statement: false,
@@ -43,8 +43,8 @@ const partialCliOptionsSchema = {
       description: "Prints help and exit",
     },
     format: {
-      enum: ["jsonl", "compact"],
-      description: "Output format, one of compact (default), jsonl",
+      enum: ["pretty", "compact", "jsonl"],
+      description: "Output format, one of pretty (default), compact, jsonl",
     },
     ts: {
       type: "boolean",

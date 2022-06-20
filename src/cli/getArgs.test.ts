@@ -75,7 +75,7 @@ describe("getArgs", () => {
         })
       ).toEqual({
         cliOptions: {
-          format: "compact",
+          format: "pretty",
           help: false,
           raw: false,
           statement: true,

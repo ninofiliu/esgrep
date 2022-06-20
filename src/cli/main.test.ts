@@ -39,11 +39,30 @@ const wrappedMain = async (minimisted: Minimisted) => {
   return ret;
 };
 
+describe("--format pretty (default)", () => {
+  it("pretty", async () => {
+    expect(
+      await wrappedMain({
+        _: ['input.addEventListener("change", ES_ANY)', "users.ts", "age.ts"],
+      })
+    ).toEqual(
+      [
+        "age.ts:4:0",
+        '4 | input.addEventListener("change", (evt) => {',
+        "5 |   console.log(`User is ${input.value} years old`);",
+        "6 | });",
+        "",
+      ].join("\n")
+    );
+  });
+});
+
 describe("--format compact", () => {
   it("$path:$line$column:$match_in_one_line", async () => {
     expect(
       await wrappedMain({
         _: ["fetch(ES_ANY)", "users.ts", "age.ts"],
+        format: "compact",
       })
     ).toEqual(
       'users.ts:2:21:fetch( "/users" )\nusers.ts:9:21:fetch( "/users" )\n'
