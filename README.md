@@ -1,8 +1,14 @@
+![example](https://raw.githubusercontent.com/ninofiliu/esgrep/main/cover.png)
+
 # ESGrep
 
 Syntactically-aware grep for JavaScript and TypeScript
 
-![example](https://raw.githubusercontent.com/ninofiliu/esgrep/main/cover.png)
+- [Usage as a CLI](#usage-as-a-cli)
+- [Usage as a library](#usage-as-a-library)
+- [Options](#options)
+- [ES Expressions](#es-expressions)
+- [About](#about)
 
 ## Usage as a CLI
 
