@@ -2,6 +2,7 @@ import getArgs from "./getArgs";
 import { find } from "../lib";
 import { Minimisted } from "../types";
 import chalk from "chalk";
+import { highlight } from "cli-highlight";
 
 export default async function* main(
   minimisted: Minimisted,
@@ -27,18 +28,34 @@ export default async function* main(
       const count = [...find(pattern, content, cliOptions)].length;
       yield `${path}:${count}\n`;
     } else {
+      const highlightedContent =
+        cliOptions.format === "pretty" ? highlight(content) : "";
       for (const match of find(pattern, content, cliOptions)) {
         if (cliOptions.format === "pretty") {
+          const clickablePath = [
+            path,
+            match.loc.start.line,
+            match.loc.start.column,
+          ].join(":");
+          const lineNbWidth = match.loc.end.line.toString().length;
           yield [
+            chalk.blue(Array(clickablePath.length + 2).join("─") + "┐"),
+            chalk.blue(`${clickablePath} │`),
             chalk.blue(
-              [path, match.loc.start.line, match.loc.start.column].join(":")
+              `${Array(lineNbWidth + 2).join(" ")}┌${Array(
+                clickablePath.length - lineNbWidth
+              ).join("─")}┘`
             ),
-            ...content
+            ...highlightedContent
               .split("\n")
               .slice(match.loc.start.line - 1, match.loc.end.line)
               .map(
                 (line, i) =>
-                  `${chalk.green(`${match.loc.start.line + i} |`)} ${line}`
+                  `${chalk.blue(
+                    `${(match.loc.start.line + i)
+                      .toString()
+                      .padStart(lineNbWidth, " ")} │`
+                  )} ${line}`
               ),
             "",
           ].join("\n");

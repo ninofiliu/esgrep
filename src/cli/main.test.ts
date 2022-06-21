@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { Minimisted } from "../types";
 import main from "./main";
 
@@ -41,18 +42,11 @@ const wrappedMain = async (minimisted: Minimisted) => {
 
 describe("--format pretty (default)", () => {
   it("pretty", async () => {
-    expect(
-      await wrappedMain({
-        _: ['input.addEventListener("change", ES_ANY)', "users.ts", "age.ts"],
-      })
-    ).toEqual(
-      [
-        "age.ts:4:0",
-        '4 | input.addEventListener("change", (evt) => {',
-        "5 |   console.log(`User is ${input.value} years old`);",
-        "6 | });",
-        "",
-      ].join("\n")
+    const result = await wrappedMain({
+      _: ['input.addEventListener("change", ES_ANY)', "users.ts", "age.ts"],
+    });
+    expect(Buffer.from(result).toString("base64")).toEqual(
+      "G1szNG3ilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAbWzM5bQobWzM0bWFnZS50czo0OjAg4pSCG1szOW0KG1szNG0gIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmBtbMzltChtbMzRtNCDilIIbWzM5bSAbWzM0bWlucHV0G1szOW0uYWRkRXZlbnRMaXN0ZW5lcigiY2hhbmdlIiwgKGV2dCkgPT4gewobWzM0bTUg4pSCG1szOW0gICBjb25zb2xlLmxvZyhgG1szNG1Vc2VyG1szOW0gG1szNG1pcxtbMzltICR7G1szNG1pbnB1dBtbMzltLhtbMzRtdmFsdWUbWzM5bX0geWVhcnMgG1szNm1vbGQbWzM5bWApOwobWzM0bTYg4pSCG1szOW0gfSk7Cg=="
     );
   });
 });

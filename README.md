@@ -132,11 +132,13 @@ Defines the output format of the search
 
 ```console
 user@host$ esgrep 'const tasks = ES_ANY' src/cli/main.ts
-src/cli/main.ts:18:2
-18 |   const tasks =
-19 |     paths.length === 0
-20 |       ? [{ path: "stdin", read: readStdin }]
-21 |       : paths.map((path) => ({ path, read: () => readFile(path) }));
+─────────────────────┐
+src/cli/main.ts:20:2 │
+   ┌─────────────────┘
+20 │   const tasks =
+21 │     paths.length === 0
+22 │       ? [{ path: "stdin", read: readStdin }]
+23 │       : paths.map((path) => ({ path, read: () => readFile(path) }));
 ```
 
 `oneline`: streams out lines of the shape `$path:$line$column:$match_in_one_line`
