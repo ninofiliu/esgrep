@@ -2,6 +2,8 @@
 
 Syntactically-aware grep for JavaScript and TypeScript
 
+![example](https://raw.githubusercontent.com/ninofiliu/esgrep/main/cover.png)
+
 ## Usage as a CLI
 
 Install it with `npm install --global esgrep` or the equivalent using pnpm/yarn/etc, then use it as `esgrep [OPTION...] PATTERN [FILE...]`. If `FILE` is not precised, reads from stdin.
