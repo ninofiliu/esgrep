@@ -1,0 +1,14 @@
+build:
+	rm -rf dist
+	pnpm exec tsc --project tsconfig.build.json
+
+test:
+	pnpm exec jest
+
+tdd:
+	pnpm exec jest --watch
+
+yeet KIND: test build
+	pnpm version {{ KIND }}
+	git push --tags
+	pnpm publish

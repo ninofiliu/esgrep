@@ -22,12 +22,6 @@
   "license": "GPL-3.0-only",
   "bin": "dist/cli/node.js",
   "main": "dist/lib.js",
-  "scripts": {
-    "build": "rm -rf dist && tsc --project tsconfig.build.json",
-    "test": "jest",
-    "tdd": "jest --watch",
-    "yeet": "pnpm run test && pnpm run build && pnpm version && pnpm publish --dry-run"
-  },
   "devDependencies": {
     "@jest/types": "^28.1.0",
     "@sucrase/jest-plugin": "^2.2.1",
