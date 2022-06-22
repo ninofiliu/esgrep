@@ -10,17 +10,30 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:esgrep-vscode.helloWorld"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "esgrep-vscode.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "esgrep",
+          "title": "ESGrep",
+          "icon": "./acid.svg"
+        }
+      ]
+    },
+    "views": {
+      "esgrep": [
+        {
+          "id": "view-id",
+          "name": "My name",
+          "type": "webview",
+          "contextualTitle": "my contextual title",
+          "icon": "./acid.svg",
+          "visibility": "visible"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
