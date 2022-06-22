@@ -25,7 +25,8 @@
   "scripts": {
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "test": "jest",
-    "tdd": "jest --watch"
+    "tdd": "jest --watch",
+    "yeet": "pnpm run test && pnpm run build && pnpm version && pnpm publish --dry-run"
   },
   "devDependencies": {
     "@jest/types": "^28.1.0",
