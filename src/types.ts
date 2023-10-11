@@ -7,4 +7,4 @@ export type CliOptions = FindOptions & {
   help: boolean;
   format: "pretty" | "oneline" | "jsonl" | "count";
 };
-export type Minimisted = { _: string[]; [key: string]: any };
+export type Minimisted = { _: string[]; [key: string]: unknown };

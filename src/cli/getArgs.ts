@@ -88,7 +88,7 @@ export default (minimisted: Minimisted): Args => {
     ...options
   } = minimisted;
 
-  const dealiasedOptions: Record<string, any> = Object.fromEntries(
+  const dealiasedOptions: Record<string, unknown> = Object.fromEntries(
     Object.entries(options).map(([key, value]) => [aliases[key] || key, value])
   );
 
