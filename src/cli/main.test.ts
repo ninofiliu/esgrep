@@ -77,10 +77,10 @@ describe("--format jsonl", () => {
       })
     ).toEqual(
       [
-        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[156,160],"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":28}}}}',
-        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[165,169],"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":37}}}}',
-        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[350,354],"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":30}}}}',
-        '{"path":"users.ts","match":{"type":"Identifier","name":"user","range":[359,363],"loc":{"start":{"line":13,"column":35},"end":{"line":13,"column":39}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[156,160],"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":28}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[165,169],"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":37}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[350,354],"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":30}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[359,363],"loc":{"start":{"line":13,"column":35},"end":{"line":13,"column":39}}}}',
         "",
       ].join("\n")
     );

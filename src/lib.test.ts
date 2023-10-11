@@ -166,11 +166,11 @@ describe("ES expressions", () => {
     it("should match anything", () => {
       expect([...findStrings("ES_ANY", "function fn() { foo(); }")]).toEqual([
         "function fn() { foo(); }",
-        "fn",
         "{ foo(); }",
         "foo();",
         "foo()",
         "foo",
+        "fn",
       ]);
       expect([
         ...findStrings("const x = ES_ANY", "const x = 10; const x = 20;"),
