@@ -1,5 +1,7 @@
 # How to contribute to ESGrep
 
+## Contribute
+
 Clone the repo
 
 ```sh
@@ -28,3 +30,14 @@ pnpm test
 ```
 
 If all looks good, you are welcomed to submit your pull request.
+
+## Build and release
+
+```sh
+pnpm test
+tsx src/cli/node.ts 'const isNode = ES_ANY' src/lib.ts
+pnpm build
+node dist/cli/node.js 'const isNode = ES_ANY' src/lib.ts
+pnpm version (patch|minor|major)
+pnpm publish
+```
