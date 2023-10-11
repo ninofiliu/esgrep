@@ -1,5 +1,6 @@
 import Ajv from "ajv";
-import { CliOptions, Minimisted } from "../types";
+
+import type { CliOptions, Minimisted } from "../types";
 
 type Args =
   | { kind: "error"; toLog: string[] }

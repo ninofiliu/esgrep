@@ -1,5 +1,4 @@
-import chalk from "chalk";
-import { Minimisted } from "../types";
+import type { Minimisted } from "../types";
 import main from "./main";
 
 const usersHaystack = `const getUserByName = async (name: string) => {

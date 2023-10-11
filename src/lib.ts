@@ -1,6 +1,7 @@
-import { Node } from "@typescript-eslint/types/dist/generated/ast-spec";
+import type { Node } from "@typescript-eslint/types/dist/generated/ast-spec";
 import { parse } from "@typescript-eslint/typescript-estree";
-import { FindOptions } from "./types";
+
+import type { FindOptions } from "./types";
 
 const isNode = (value: unknown): value is Node =>
   value !== null && typeof value === "object" && "type" in value;

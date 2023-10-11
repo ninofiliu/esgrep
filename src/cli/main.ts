@@ -1,8 +1,9 @@
-import getArgs from "./getArgs";
-import { find } from "../lib";
-import { Minimisted } from "../types";
 import chalk from "chalk";
 import { highlight } from "cli-highlight";
+
+import { find } from "../lib";
+import type { Minimisted } from "../types";
+import getArgs from "./getArgs";
 
 export default async function* main(
   minimisted: Minimisted,

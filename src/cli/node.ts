@@ -1,6 +1,7 @@
-import main from "./main";
 import { readFile } from "fs/promises";
 import minimist from "minimist";
+
+import main from "./main";
 
 (async () => {
   const chunks = main(
