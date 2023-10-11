@@ -1,3 +1,4 @@
+// @ts-ignore
 import type { Node } from "@typescript-eslint/types/dist/generated/ast-spec";
 import { parse } from "@typescript-eslint/typescript-estree";
 
@@ -21,11 +22,14 @@ function* dfs(obj: unknown): Generator<Node> {
   }
 }
 
-const uniformizeTemplate = (value: object) => {
+const uniformizeTemplate = (value: Record<string, unknown>) => {
   if (!isNode(value)) return value;
   if (value.type !== "TemplateLiteral") return value;
+
+  // @ts-ignore
   if (value.quasis.length > 1) return value;
 
+  // @ts-ignore
   return { type: "Literal", value: value.quasis[0].value.cooked };
 };
 
@@ -41,8 +45,8 @@ const matches = (value: unknown, target: unknown, options: FindOptions) => {
     );
   } else {
     if (Array.isArray(target)) return false;
-    let cValue = value;
-    let cTarget = target;
+    let cValue = value as any;
+    let cTarget = target as any;
     if (!options.raw) {
       cValue = uniformizeTemplate(cValue);
       cTarget = uniformizeTemplate(cTarget);

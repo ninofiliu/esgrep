@@ -4,9 +4,9 @@
     "outDir": "dist",
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "sourceMap": true,
-    "module": "CommonJS",
+    "module": "NodeNext",
     "strictNullChecks": true,
     "declaration": true,
     "esModuleInterop": true
