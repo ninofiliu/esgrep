@@ -30,9 +30,9 @@ const wrappedMain = async (minimisted: Minimisted) => {
     minimisted,
     (path: "users.ts" | "age.ts") =>
       Promise.resolve(
-        { "users.ts": usersHaystack, "age.ts": ageHaystack }[path]
+        { "users.ts": usersHaystack, "age.ts": ageHaystack }[path],
       ),
-    () => Promise.resolve("")
+    () => Promise.resolve(""),
   );
   let ret = "";
   for await (const chunk of chunks) ret += chunk;
@@ -45,7 +45,7 @@ describe("--format pretty (default)", () => {
       _: ['input.addEventListener("change", ES_ANY)', "users.ts", "age.ts"],
     });
     expect(Buffer.from(result).toString("base64")).toEqual(
-      "G1szNG3ilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAbWzM5bQobWzM0bWFnZS50czo0OjAg4pSCG1szOW0KG1szNG0gIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmBtbMzltChtbMzRtNCDilIIbWzM5bSAbWzM0bWlucHV0G1szOW0uYWRkRXZlbnRMaXN0ZW5lcigiY2hhbmdlIiwgKGV2dCkgPT4gewobWzM0bTUg4pSCG1szOW0gICBjb25zb2xlLmxvZyhgG1szNG1Vc2VyG1szOW0gG1szNG1pcxtbMzltICR7G1szNG1pbnB1dBtbMzltLhtbMzRtdmFsdWUbWzM5bX0geWVhcnMgG1szNm1vbGQbWzM5bWApOwobWzM0bTYg4pSCG1szOW0gfSk7Cg=="
+      "G1szNG3ilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAbWzM5bQobWzM0bWFnZS50czo0OjAg4pSCG1szOW0KG1szNG0gIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmBtbMzltChtbMzRtNCDilIIbWzM5bSAbWzM0bWlucHV0G1szOW0uYWRkRXZlbnRMaXN0ZW5lcigiY2hhbmdlIiwgKGV2dCkgPT4gewobWzM0bTUg4pSCG1szOW0gICBjb25zb2xlLmxvZyhgG1szNG1Vc2VyG1szOW0gG1szNG1pcxtbMzltICR7G1szNG1pbnB1dBtbMzltLhtbMzRtdmFsdWUbWzM5bX0geWVhcnMgG1szNm1vbGQbWzM5bWApOwobWzM0bTYg4pSCG1szOW0gfSk7Cg==",
     );
   });
 });
@@ -56,13 +56,13 @@ describe("--format oneline", () => {
       await wrappedMain({
         _: ["fetch(ES_ANY)", "users.ts", "age.ts"],
         format: "oneline",
-      })
+      }),
     ).toEqual(
       [
         'users.ts:2:21:fetch( "/users" )',
         'users.ts:9:21:fetch( "/users" )',
         "",
-      ].join("\n")
+      ].join("\n"),
     );
   });
 });
@@ -73,15 +73,15 @@ describe("--format jsonl", () => {
       await wrappedMain({
         _: ["user", "users.ts", "age.ts"],
         format: "jsonl",
-      })
+      }),
     ).toEqual(
       [
-        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[156,160],"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":28}}}}',
-        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[165,169],"loc":{"start":{"line":6,"column":33},"end":{"line":6,"column":37}}}}',
-        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[350,354],"loc":{"start":{"line":13,"column":26},"end":{"line":13,"column":30}}}}',
-        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[359,363],"loc":{"start":{"line":13,"column":35},"end":{"line":13,"column":39}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[165,169],"loc":{"end":{"column":37,"line":6},"start":{"column":33,"line":6}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[156,160],"loc":{"end":{"column":28,"line":6},"start":{"column":24,"line":6}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[359,363],"loc":{"end":{"column":39,"line":13},"start":{"column":35,"line":13}}}}',
+        '{"path":"users.ts","match":{"type":"Identifier","decorators":[],"name":"user","optional":false,"range":[350,354],"loc":{"end":{"column":30,"line":13},"start":{"column":26,"line":13}}}}',
         "",
-      ].join("\n")
+      ].join("\n"),
     );
   });
 });
@@ -92,7 +92,7 @@ describe("--format count", () => {
       await wrappedMain({
         _: ["user", "users.ts", "age.ts"],
         format: "count",
-      })
+      }),
     ).toEqual(["users.ts:4", "age.ts:0", ""].join("\n"));
   });
 });
